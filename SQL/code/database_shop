@@ -1,0 +1,174 @@
+Thiết kế databse web bán hàng
+
+- Xác định đối tượng trên website?
++ Tin tức
++ Sản phẩm
++ Người dùng (Quản trị viên)
++ Khách hàng
++ Đơn hàng
+....
+
+- Xác định được đặc điểm cuả các đối tượng: Các đối tượng cần quản lý có những thông tin gì
+
+- Phân tích chi tiết theo chức năng của website
+
+1. Bảng product_categories: Lưu trữ các danh mục sản phẩm
+- id int primary
+- title varchar(200)
+- banner varchar(200)
+- createAt datetime
+- updateAt datetime
+
+2. Bảng products: Lưu trữ sản phẩm
+- id int primary => id sản phẩm
+- name varchar(200) => tên sản phẩm
+- code varchar(100) => mã sản phẩm
+- brandId int foreign key tới brand(id) => ID hãng sản xuất
+- originId int foreign key tới origin(id) => ID xuất xứ
+- stockStatus tinyint => Tình trạng còn hàng (0: Hết hàng, 1: Còn hàng)
+- regularPrice int => Giá bán thường
+- salePrice int => Giá khuyến mãi
+- thumbnail => Ảnh đại diện sản phẩm
+- description => Mô tả sản phẩm
+- rateStar => Đánh giá sao
+- categoryId int foreign key tới product_categories(id) => Id danh mục sản phẩm
+- createAt datetime
+- updateAt datetime
+
+3. Bảng brand: Lưu trữ hãng sản xuất
+- id int primary key => id hãng sản xuất
+- name varchar(200) => Tên hãng
+- createAt datetime
+- updateAt datetime
+
+4. origin: Lưu trữ xuất xứ
+- id int primary key => id xuất xứ
+- name varchar(200) => Tên xuất xứ
+- createAt datetime
+- updateAt datetime
+
+5. color: Lưu trữ màu sắc của sản phẩm
+- id int primary key => id màu
+- name varchar(50) => Tên màu
+- code varchar(20) => Mã màu
+- createAt datetime
+- updateAt datetime
+
+6. product_color: Liên kết sản phẩm với màu sắc
+- id int primary key => id liên kết
+- productId int foreign key tới product(id) => Id sản phẩm
+- colorId int foreign key tới color(id) =>  Id màu
+- createAt datetime
+- updateAt datetime
+
+7. product_images: Lưu trữ và liên kết sản phẩm với gallery ảnh
+- id int primary key => id liên kết
+- productId int foreign key tới product(id) => Id sản phẩm
+- imageUrl varchar (200) => Link ảnh (Tên ảnh)
+- createAt datetime
+- updateAt datetime
+
+8. comments: Lưu trữ các đánh giá sản phẩm
+- id int primary key => id comment
+- name varchar(50) => Tên khách hàng comment
+- email varchar(100) => Email khách hàng comment
+- content text => Nội dung comment
+- status tinyint default 0 => Trạng thái (0: Chờ duyệt, 1: Đã duyệt)
+- productId int foreign key tới product(id) => Id sản phẩm
+- createAt datetime
+- updateAt datetime
+
+9. categories: Chuyên mục tin tức
+- id int primary key => id chuyên mục
+- name varchar(200) => Tên chuyên mục
+- banner varchar(200) => Banner chuyên mục
+- createAt datetime
+- updateAt datetime
+
+10. news: Tin tức
+- id int primary key => id tin tức
+- name varchar(255) => Tiêu đề tin tức
+- content text => Nội dung tin tức
+- status tinyint => Trạng thái tin tức (0: Chưa duyệt, 1: Đã duyệt)
+- categoryId int foreign key tới categories(id) => Id chuyên mục
+- description text => Nội dung mô tả
+- thumbnail varchar(200) => Ảnh đại diện
+- createAt datetime
+- updateAt datetime
+
+11. coupon: Mã giảm giá
+- id int primary key => id mã giảm giá
+- code varchar(100) => Mã giảm giá
+- discountType varchar(10) => (value: Theo số tiền, percent: Theo %)
+- discountValue float => Giá trị giảm giá
+- expireDate date => Ngày hết hạn
+- createAt datetime
+- updateAt datetime
+
+12. order_overview: Danh sách đơn hàng
+- id int primary key => id đơn hàng
+- code varchar(200) => Mã đơn hàng
+- customerName varchar(50) => Tên khách hàng
+- customerEmail varchar(100) => Email khách hàng
+- customerPhone varchar(20) => Số điện thoại
+- customerAddress varchar(150) => Địa chỉ
+- provinceId int foreign key tới province(id) => Id tỉnh thành
+- districtId int foreign key tới district(id) => Id quận huyện
+- wardId int foreign key tới ward(id) => Id xã phường
+- total int => Tổng giá trị đơn hàng
+- status tinyint => Trạng thái đơn hàng (0: Chưa xử lý, 1: Đang xử lý, 2: Đang giao hàng, 3: Hoàn thành)
+- createAt datetime
+- updateAt datetime
+
+13. order_detail: Chi tiết đơn hàng
+- id int primary key => id chi tiết đơn hàng
+- orderId int foreign key tới order_overview(id) => Id đơn hàng
+- productId int foreign key tới product(id) => Id sản phẩm
+- quantity int => Số lượng sản phẩm
+- price int => Giá sản phẩm khi đặt hàng
+- amount int => Thành tiền (quantity x price)
+- createAt datetime
+- updateAt datetime
+
+14. contact: Quản lý thông tin liên hệ
+- id int primary key => id liên hệ
+- name varchar(50) => Tên
+- email varchar(100) => Email
+- content text => Nội dung
+- status tinyint => Trạng thái (0: Chưa xử lý, 1: Đã xử lý)
+- createAt datetime
+- updateAt datetime
+
+15. users: Quản lý người dùng (Quản trị viên)
+- id int primary key => id người dùng
+- email varchar(100) => Email người dùng
+- fullname varchar(50) => Tên người dùng
+- password varchar(50) => Mật khẩu
+- forgotToken varchar(50) => Token quên mật khẩu
+- status tinyint => Trạng thái (0: Bị khoá, 1: Đang hoạt động)
+- lastLogin datetime => Thời gian login cuối cùng
+- createAt datetime
+- updateAt datetime
+
+16. options: Quản lý các thiết lập
+- id int primary key => id options
+- opt_key varchar(100) => Key options
+- opt_value text => Key value
+
+17. province: Tỉnh thành
+- id int primary key => id tỉnh
+- _name varchar(50)	=> Tên tỉnh
+- _code varchar(50) => Mã tỉnh
+
+18. district: Quận huyện
+- id int primary key => id quận huyện
+_name varchar(100) => Tên quận huyện
+_prefix varchar(20) => Tiền tố
+_province_id int foreign key tới province(id) => id tỉnh
+
+19. ward: Xã phường
+- id int primary key => id xã phường
+_name varchar(50) => Tên xã phường
+_prefix varchar(20) => Tiền tố
+_province_id int foreign key tới province(id) => id tỉnh
+_district_id int foreign key tới district(id) => id quận huyện

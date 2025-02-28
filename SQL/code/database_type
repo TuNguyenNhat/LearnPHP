@@ -1,0 +1,11 @@
+Các loại cơ sở dữ liệu
+
+1. Cơ sở dữ liệu quan hệ (Oracle, MySQL, MS Server, PostgreSQL)
+2. Cơ sở dữ liệu hướng tài liệu (MongoDB, Couchbase)
+3. Cơ sở dữ liệu dạng khoá – giá trị (Redis, Memcached)
+4. Cơ sở dữ liệu phi quan hệ (Cassandra, HBase)
+5. Cơ sở dữ liệu dạng bộ máy tìm kiếm (Elasticsearch)
+
+
+1. SQL: Ngôn ngữ truy vấn: Không thay đổi
+2. MySQL, SQL Server: Phần mềm, update thường xuyên
